@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
 
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,80 +29,80 @@ body{
 body{
     background:#000;
     overflow:hidden;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
 }
 
-.container{
-    position:absolute;
-    left:50%;
-    top:50%;
-
-    transform:translate(-50%,-55%);
+.wrapper{
     width:90vw;
 }
 
-.time-row{
+.clock-layout{
     display:flex;
     justify-content:center;
     align-items:flex-end;
+    gap:4vw;
 }
 
-.time-block{
+.column{
+    display:flex;
+    flex-direction:column;
+}
+
+.time{
     font-family:"Compacta", sans-serif;
     font-size:15vw;
     line-height:0.82;
-    color:#F2F2F2;
     letter-spacing:-0.04em;
+    color:#f2f2f2;
 }
 
-#minutes{
-    margin-left:4vw;
+.meta{
+    margin-top:0.6vw;
+
+    font-family:Arial, sans-serif;
+    font-size:2.1vw;
+    font-weight:300;
+    color:white;
 }
 
-#seconds{
-    margin-left:4vw;
+.seconds-column{
+    display:flex;
+    flex-direction:column;
+}
+
+.seconds-row{
+    display:flex;
+    align-items:flex-end;
 }
 
 .period{
     font-family:"Compacta", sans-serif;
-
-    font-size:3.2vw;
-    color:#26282F;
+    font-size:3vw;
+    line-height:1;
+    color:#242630;
 
     margin-left:0.8vw;
-    margin-bottom:0.6vw;
+    margin-bottom:1vw;
 }
 
-.info-row{
-    position:relative;
-
-    margin-top:0.8vw;
-    height:3vw;
-
-    font-family:Arial, sans-serif;
-    font-size:2vw;
-    color:white;
-}
 .weather{
+    margin-top:0.6vw;
+
     display:flex;
     align-items:center;
     gap:10px;
+
+    font-family:Arial, sans-serif;
+    font-size:2.1vw;
+    font-weight:300;
+    color:white;
 }
 
 #weatherIcon{
     font-size:1.8vw;
-}
-#date{
-    position:absolute;
-    left:0;
-}
-
-.weather{
-    position:absolute;
-    right:7.2vw;
-
-    display:flex;
-    align-items:center;
-    gap:10px;
 }
 
 </style>
@@ -111,32 +111,43 @@ body{
 
 <body>
 
-<div class="container">
+<div class="wrapper">
 
-    <div class="time-row">
+```
+<div class="clock-layout">
 
-        <div class="time-block" id="hours">
-            05
+    <div class="column">
+
+        <div class="time" id="hours">
+            09
         </div>
 
-        <div class="time-block" id="minutes">
-            13
-        </div>
-
-        <div class="time-block" id="seconds">
-            37
-        </div>
-
-        <div class="period" id="period">
-            PM
+        <div class="meta" id="date">
+            Tue, 9 Jun
         </div>
 
     </div>
 
-    <div class="info-row">
+    <div class="column">
 
-        <div id="date">
-            Tue, 9 Jun
+        <div class="time" id="minutes">
+            14
+        </div>
+
+    </div>
+
+    <div class="seconds-column">
+
+        <div class="seconds-row">
+
+            <div class="time" id="seconds">
+                34
+            </div>
+
+            <div class="period" id="period">
+                PM
+            </div>
+
         </div>
 
         <div class="weather">
@@ -152,6 +163,9 @@ body{
         </div>
 
     </div>
+
+</div>
+```
 
 </div>
 
@@ -215,13 +229,13 @@ async function updateWeather(){
         if(code >= 1 && code <= 3)
             icon = "⛅";
 
-        else if(code >= 45)
+        else if(code >= 45 && code <= 48)
             icon = "🌫";
 
-        else if(code >= 51)
+        else if(code >= 51 && code <= 67)
             icon = "🌧";
 
-        else if(code >= 71)
+        else if(code >= 71 && code <= 77)
             icon = "❄";
 
         else if(code >= 95)
@@ -230,11 +244,13 @@ async function updateWeather(){
         document.getElementById("weatherIcon").textContent =
             icon;
 
-    }catch(error){
+    }
+    catch(error){
 
         console.log(error);
 
     }
+
 }
 
 updateClock();
@@ -246,5 +262,4 @@ setInterval(updateWeather,600000);
 </script>
 
 </body>
-
 </html>
