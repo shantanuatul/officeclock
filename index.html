@@ -1,71 +1,126 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Office Clock</title>
 
 <style>
+
+@font-face {
+    font-family: "Compacta";
+    src: url("./CompactaBlack.otf") format("opentype");
+}
+
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
 }
 
+html,
+body{
+    width:100%;
+    height:100%;
+}
 
 body{
     background:#000;
-    color:white;
-    font-family:Inter, Helvetica, sans-serif;
-
+    color:#F2F2F2;
 
     display:flex;
-    flex-direction:column;
     justify-content:center;
     align-items:center;
 
-
-    width:100vw;
-    height:100vh;
+    overflow:hidden;
 }
 
-
-.time{
-    font-size:16vw;
-    font-weight:200;
-    letter-spacing:-0.05em;
+.container{
+    width:68vw;
 }
 
-
-.info{
-    margin-top:20px;
-    font-size:2vw;
-    opacity:.8;
+.time-row{
+    display:flex;
+    align-items:flex-end;
+    gap:3vw;
 }
 
-#weather{
-    display:inline-flex;
+.time-block{
+    font-family:"Compacta", sans-serif;
+    font-size:18vw;
+    line-height:0.85;
+    letter-spacing:-0.03em;
+    color:#F2F2F2;
+}
+
+.period{
+    font-family:"Compacta", sans-serif;
+    font-size:4vw;
+    color:#353535;
+    margin-bottom:2vw;
+    margin-left:-1vw;
+}
+
+.info-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-top:1.6vw;
+
+    font-family:Inter, Arial, sans-serif;
+    font-size:2.2vw;
+    font-weight:300;
+
+    color:#F2F2F2;
+}
+
+.weather{
+    display:flex;
     align-items:center;
     gap:12px;
-    margin-left:20px;
 }
-</style>
-</head>
 
+#weatherIcon{
+    font-size:1.9vw;
+}
+
+</style>
+
+</head>
 
 <body>
 
+<div class="container">
 
-<div class="time" id="clock"></div>
-<div class="info">
-    <span id="date"></span>
+    <div class="time-row">
 
-    <span id="weather">
-        <span id="weatherIcon">☀</span>
-        <span id="temp">--°C</span>
-    </span>
+        <div class="time-block" id="hours">09</div>
+
+        <div class="time-block" id="minutes">14</div>
+
+        <div class="time-block" id="seconds">34</div>
+
+        <div class="period" id="period">PM</div>
+
+    </div>
+
+    <div class="info-row">
+
+        <div id="date">
+            Tue, 9 Jun
+        </div>
+
+        <div class="weather">
+            <span id="weatherIcon">☀</span>
+            <span id="temp">39°C</span>
+        </div>
+
+    </div>
+
 </div>
-
 
 <script>
 
@@ -73,68 +128,81 @@ function updateClock(){
 
     const now = new Date();
 
-    const time = now.toLocaleTimeString(
-        [],
-        {
-            hour:'2-digit',
-            minute:'2-digit',
-            second:'2-digit',
-            hour12:false
-        }
-    );
+    let hours = now.getHours();
 
-    const date = now.toLocaleDateString(
-        'en-GB',
-        {
-            weekday:'short',
-            day:'numeric',
-            month:'short'
-        }
-    );
+    const period = hours >= 12 ? "PM" : "AM";
 
-    document.getElementById('clock').innerText = time;
-    document.getElementById('date').innerText = date;
+    hours = hours % 12;
+    if(hours === 0) hours = 12;
+
+    const minutes = now.getMinutes();
+    const seconds = now.getSeconds();
+
+    document.getElementById("hours").textContent =
+        String(hours).padStart(2,"0");
+
+    document.getElementById("minutes").textContent =
+        String(minutes).padStart(2,"0");
+
+    document.getElementById("seconds").textContent =
+        String(seconds).padStart(2,"0");
+
+    document.getElementById("period").textContent =
+        period;
+
+    document.getElementById("date").textContent =
+        now.toLocaleDateString(
+            "en-GB",
+            {
+                weekday:"short",
+                day:"numeric",
+                month:"short"
+            }
+        );
 }
-
 
 async function updateWeather(){
 
     try{
 
         const response = await fetch(
-            'https://api.open-meteo.com/v1/forecast?latitude=23.0225&longitude=72.5714&current=temperature_2m,weather_code'
+            "https://api.open-meteo.com/v1/forecast?latitude=23.0225&longitude=72.5714&current=temperature_2m,weather_code"
         );
 
         const data = await response.json();
 
-        document.getElementById('temp').innerText =
-            Math.round(data.current.temperature_2m) + '°C';
+        document.getElementById("temp").textContent =
+            Math.round(data.current.temperature_2m) + "°C";
 
         const code = data.current.weather_code;
 
-        let icon = '☀';
+        let icon = "☀";
 
         if(code >= 1 && code <= 3)
-            icon = '⛅';
+            icon = "⛅";
 
-        if(code >= 45)
-            icon = '🌫';
+        else if(code >= 45 && code <= 48)
+            icon = "🌫";
 
-        if(code >= 51)
-            icon = '🌧';
+        else if(code >= 51 && code <= 67)
+            icon = "🌧";
 
-        if(code >= 95)
-            icon = '⛈';
+        else if(code >= 71 && code <= 77)
+            icon = "❄";
 
-        document.getElementById('weatherIcon').innerText = icon;
+        else if(code >= 95)
+            icon = "⛈";
 
-    }catch(error){
+        document.getElementById("weatherIcon").textContent =
+            icon;
 
-        console.log(error);
+    }
+    catch(error){
+
+        console.log("Weather error:", error);
 
     }
 }
-
 
 updateClock();
 updateWeather();
@@ -144,6 +212,6 @@ setInterval(updateWeather,600000);
 
 </script>
 
-
 </body>
+
 </html>
