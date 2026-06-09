@@ -64,24 +64,24 @@ body{
 
 .period{
     font-family:"Compacta", sans-serif;
-    font-size:4vw;
+
+    font-size:3.2vw;
     color:#26282F;
 
-    margin-left:1vw;
-    margin-bottom:1.8vw;
+    margin-left:0.8vw;
+    margin-bottom:0.6vw;
 }
 
 .info-row{
-    display:flex;
-    justify-content:space-between;
+    position:relative;
 
-    margin-top:1.2vw;
+    margin-top:0.8vw;
+    height:3vw;
 
     font-family:Arial, sans-serif;
     font-size:2vw;
     color:white;
 }
-
 .weather{
     display:flex;
     align-items:center;
@@ -90,6 +90,19 @@ body{
 
 #weatherIcon{
     font-size:1.8vw;
+}
+#date{
+    position:absolute;
+    left:0;
+}
+
+.weather{
+    position:absolute;
+    right:7.2vw;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
 }
 
 </style>
