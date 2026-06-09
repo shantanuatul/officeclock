@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+
+body{
+    background:#000;
+    color:white;
+    font-family:Inter, Helvetica, sans-serif;
+
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+
+    width:100vw;
+    height:100vh;
+}
+
+
+.time{
+    font-size:16vw;
+    font-weight:200;
+    letter-spacing:-0.05em;
+}
+
+
+.info{
+    margin-top:20px;
+    font-size:2vw;
+    opacity:.8;
+}
+</style>
+</head>
+
+
+<body>
+
+
+<div class="time" id="clock"></div>
+<div class="info" id="date"></div>
+
+
+<script>
+
+
+function updateClock(){
+
+
+    const now = new Date();
+
+
+    const time = now.toLocaleTimeString(
+        [],
+        {
+            hour:'2-digit',
+            minute:'2-digit',
+            second:'2-digit',
+            hour12:false
+        }
+    );
+
+
+    const date = now.toLocaleDateString(
+        [],
+        {
+            weekday:'short',
+            day:'numeric',
+            month:'short'
+        }
+    );
+
+
+    document.getElementById('clock').innerText = time;
+    document.getElementById('date').innerText = date;
+}
+
+
+setInterval(updateClock,1000);
+updateClock();
+
+
+</script>
+
+
+</body>
+</html>
