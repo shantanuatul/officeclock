@@ -4,7 +4,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Office Clock</title>
 
 <style>
@@ -39,16 +38,22 @@ body{
     width:90vw;
 }
 
-.clock-layout{
-    display:flex;
-    justify-content:center;
-    align-items:flex-end;
-    gap:4vw;
-}
+/* ---------- TOP ROW ---------- */
 
-.column{
-    display:flex;
-    flex-direction:column;
+.top-row{
+
+    display:grid;
+
+    grid-template-columns:
+        auto
+        auto
+        auto;
+
+    justify-content:center;
+
+    column-gap:4vw;
+
+    align-items:end;
 }
 
 .time{
@@ -56,49 +61,72 @@ body{
     font-size:15vw;
     line-height:0.82;
     letter-spacing:-0.04em;
-    color:#f2f2f2;
+    color:#F2F2F2;
 }
 
-.meta{
-    margin-top:0.6vw;
+.seconds-group{
 
-    font-family:Arial, sans-serif;
-    font-size:2.1vw;
-    font-weight:300;
-    color:white;
-}
-
-.seconds-column{
-    display:flex;
-    flex-direction:column;
-}
-
-.seconds-row{
     display:flex;
     align-items:flex-end;
 }
 
 .period{
+
     font-family:"Compacta", sans-serif;
+
     font-size:3vw;
     line-height:1;
+
     color:#242630;
 
-    margin-left:0.8vw;
-    margin-bottom:1vw;
+    margin-left:.7vw;
+    margin-bottom:.8vw;
+}
+
+/* ---------- BOTTOM ROW ---------- */
+
+.bottom-row{
+
+    display:grid;
+
+    grid-template-columns:
+        auto
+        auto
+        auto;
+
+    justify-content:center;
+
+    column-gap:4vw;
+
+    margin-top:.8vw;
+
+    align-items:start;
+}
+
+.date{
+
+    font-family:Arial, sans-serif;
+    font-size:2.1vw;
+    color:white;
+
+    justify-self:start;
+}
+
+.empty{
+    width:100%;
 }
 
 .weather{
-    margin-top:0.6vw;
+
+    font-family:Arial, sans-serif;
+    font-size:2.1vw;
+    color:white;
 
     display:flex;
     align-items:center;
     gap:10px;
 
-    font-family:Arial, sans-serif;
-    font-size:2.1vw;
-    font-weight:300;
-    color:white;
+    justify-self:end;
 }
 
 #weatherIcon{
@@ -114,53 +142,51 @@ body{
 <div class="wrapper">
 
 ```
-<div class="clock-layout">
+<!-- CLOCK -->
 
-    <div class="column">
+<div class="top-row">
 
-        <div class="time" id="hours">
-            09
+    <div class="time" id="hours">
+        09
+    </div>
+
+    <div class="time" id="minutes">
+        14
+    </div>
+
+    <div class="seconds-group">
+
+        <div class="time" id="seconds">
+            34
         </div>
 
-        <div class="meta" id="date">
-            Tue, 9 Jun
+        <div class="period" id="period">
+            PM
         </div>
 
     </div>
 
-    <div class="column">
+</div>
 
-        <div class="time" id="minutes">
-            14
-        </div>
+<!-- DATE / WEATHER -->
 
+<div class="bottom-row">
+
+    <div class="date" id="date">
+        Tue, 9 Jun
     </div>
 
-    <div class="seconds-column">
+    <div class="empty"></div>
 
-        <div class="seconds-row">
+    <div class="weather">
 
-            <div class="time" id="seconds">
-                34
-            </div>
+        <span id="weatherIcon">
+            ☀
+        </span>
 
-            <div class="period" id="period">
-                PM
-            </div>
-
-        </div>
-
-        <div class="weather">
-
-            <span id="weatherIcon">
-                ☀
-            </span>
-
-            <span id="temp">
-                39°C
-            </span>
-
-        </div>
+        <span id="temp">
+            39°C
+        </span>
 
     </div>
 
@@ -250,7 +276,6 @@ async function updateWeather(){
         console.log(error);
 
     }
-
 }
 
 updateClock();
