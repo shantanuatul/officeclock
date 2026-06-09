@@ -28,58 +28,68 @@ body{
 
 body{
     background:#000;
-    color:#F2F2F2;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
     overflow:hidden;
 }
 
 .container{
-    width:80vw;
+    position:absolute;
+    left:50%;
+    top:50%;
+
+    transform:translate(-50%,-55%);
+    width:90vw;
 }
 
 .time-row{
     display:flex;
-    justify-content:space-between;
+    justify-content:center;
     align-items:flex-end;
 }
 
 .time-block{
     font-family:"Compacta", sans-serif;
-    font-size:14vw;
-    line-height:0.85;
-    letter-spacing:-0.03em;
+    font-size:15vw;
+    line-height:0.82;
     color:#F2F2F2;
+    letter-spacing:-0.04em;
+}
+
+#minutes{
+    margin-left:4vw;
+}
+
+#seconds{
+    margin-left:4vw;
 }
 
 .period{
     font-family:"Compacta", sans-serif;
     font-size:4vw;
-    color:#353535;
-    margin-bottom:2vw;
-    margin-left:-1vw;
+    color:#26282F;
+
+    margin-left:1vw;
+    margin-bottom:1.8vw;
 }
 
 .info-row{
-    display:grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    display:flex;
+    justify-content:space-between;
 
     margin-top:1.2vw;
-    align-items:center;
+
+    font-family:Arial, sans-serif;
+    font-size:2vw;
+    color:white;
 }
 
 .weather{
-    justify-self:start;
     display:flex;
     align-items:center;
     gap:10px;
 }
 
 #weatherIcon{
-    font-size:1.9vw;
+    font-size:1.8vw;
 }
 
 </style>
@@ -92,27 +102,42 @@ body{
 
     <div class="time-row">
 
-        <div class="time-block" id="hours">09</div>
+        <div class="time-block" id="hours">
+            05
+        </div>
 
-        <div class="time-block" id="minutes">14</div>
+        <div class="time-block" id="minutes">
+            13
+        </div>
 
-        <div class="time-block" id="seconds">34</div>
+        <div class="time-block" id="seconds">
+            37
+        </div>
 
-        <div class="period" id="period">PM</div>
+        <div class="period" id="period">
+            PM
+        </div>
 
     </div>
 
     <div class="info-row">
 
-    <div id="date">
-        Tue 9 Jun
-    </div>
+        <div id="date">
+            Tue, 9 Jun
+        </div>
 
-    <div></div>
+        <div class="weather">
 
-    <div class="weather">
-        <span id="weatherIcon">☀</span>
-        <span id="temp">41°C</span>
+            <span id="weatherIcon">
+                ☀
+            </span>
+
+            <span id="temp">
+                39°C
+            </span>
+
+        </div>
+
     </div>
 
 </div>
@@ -125,22 +150,22 @@ function updateClock(){
 
     let hours = now.getHours();
 
-    const period = hours >= 12 ? "PM" : "AM";
+    const period =
+        hours >= 12 ? "PM" : "AM";
 
     hours = hours % 12;
-    if(hours === 0) hours = 12;
 
-    const minutes = now.getMinutes();
-    const seconds = now.getSeconds();
+    if(hours === 0)
+        hours = 12;
 
     document.getElementById("hours").textContent =
         String(hours).padStart(2,"0");
 
     document.getElementById("minutes").textContent =
-        String(minutes).padStart(2,"0");
+        String(now.getMinutes()).padStart(2,"0");
 
     document.getElementById("seconds").textContent =
-        String(seconds).padStart(2,"0");
+        String(now.getSeconds()).padStart(2,"0");
 
     document.getElementById("period").textContent =
         period;
@@ -169,20 +194,21 @@ async function updateWeather(){
         document.getElementById("temp").textContent =
             Math.round(data.current.temperature_2m) + "°C";
 
-        const code = data.current.weather_code;
+        const code =
+            data.current.weather_code;
 
         let icon = "☀";
 
         if(code >= 1 && code <= 3)
             icon = "⛅";
 
-        else if(code >= 45 && code <= 48)
+        else if(code >= 45)
             icon = "🌫";
 
-        else if(code >= 51 && code <= 67)
+        else if(code >= 51)
             icon = "🌧";
 
-        else if(code >= 71 && code <= 77)
+        else if(code >= 71)
             icon = "❄";
 
         else if(code >= 95)
@@ -191,10 +217,9 @@ async function updateWeather(){
         document.getElementById("weatherIcon").textContent =
             icon;
 
-    }
-    catch(error){
+    }catch(error){
 
-        console.log("Weather error:", error);
+        console.log(error);
 
     }
 }
