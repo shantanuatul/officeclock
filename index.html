@@ -38,18 +38,18 @@ body{
 }
 
 .container{
-    width:68vw;
+    width:80vw;
 }
 
 .time-row{
     display:flex;
+    justify-content:space-between;
     align-items:flex-end;
-    gap:3vw;
 }
 
 .time-block{
     font-family:"Compacta", sans-serif;
-    font-size:18vw;
+    font-size:14vw;
     line-height:0.85;
     letter-spacing:-0.03em;
     color:#F2F2F2;
@@ -64,8 +64,9 @@ body{
 }
 
 .info-row{
-    display:flex;
-    justify-content:space-between;
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin-top:1.2vw;
     align-items:center;
 
     margin-top:1.6vw;
@@ -78,9 +79,10 @@ body{
 }
 
 .weather{
+    justify-self:end;
     display:flex;
     align-items:center;
-    gap:12px;
+    gap:10px;
 }
 
 #weatherIcon{
