@@ -36,6 +36,9 @@ body{
     display:inline-flex;
     flex-direction:column;
     align-items:center;
+
+    /* shift left by half the PM label width so digits are visually centered */
+    transform: translateX(-1vw); /* half of ~2.25vw PM + margin */
 }
 
 /* ---------- TOP ROW ---------- */
@@ -45,10 +48,9 @@ body{
     not to .clock-block which includes the bottom row.
 */
 .top-row{
-    position:relative;
     display:flex;
     align-items:baseline;
-    column-gap:3vw;
+    column-gap:2vw;
 }
 
 .time{
@@ -58,26 +60,20 @@ body{
     letter-spacing:0.01em;
     color:#F2F2F2;
 
-    width:15vw;            /* increased from 13.5vw — safely fits any digit pair */
+    width:15vw;
     text-align:center;
     display:block;
 }
 
-/*
-    PM anchors to .top-row.
-    top:0 = top of the digit block.
-    left:100% = just past the right edge of the digits.
-    No bottom calc needed.
-*/
 .period{
     font-family:"Compacta", sans-serif;
-    font-size:2.25vw;
+    font-size:3vw;
     line-height:1;
-    color:#242630;
+    color:#4D4D4D;
 
     align-self:flex-end;
-    margin-bottom:0.9vw;
-    margin-left:1.5vw;     /* increased from 0.525vw to prevent overlap */
+    margin-bottom:0.1vw;
+    margin-left:1vw;
 }
 /* ---------- BOTTOM ROW ---------- */
 
@@ -85,7 +81,7 @@ body{
     display:flex;
     align-items:center;
     gap:2vw;
-    margin-top:0.7vw;
+    margin-top:1vw;
 }
 
 .date,
