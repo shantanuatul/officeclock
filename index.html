@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -28,170 +27,105 @@ body{
 body{
     background:#000;
     overflow:hidden;
-
     display:flex;
     justify-content:center;
     align-items:center;
 }
 
-.wrapper{
-    width:90vw;
+.clock-block{
+    display:inline-flex;
+    flex-direction:column;
+    align-items:center;
 }
 
 /* ---------- TOP ROW ---------- */
 
+/*
+    position:relative here so PM anchors to THIS box,
+    not to .clock-block which includes the bottom row.
+*/
 .top-row{
-
-    display:grid;
-
-    grid-template-columns:
-        auto
-        auto
-        auto;
-
-    justify-content:center;
-
-    column-gap:4vw;
-
-    align-items:end;
+    position:relative;
+    display:flex;
+    align-items:baseline;
+    column-gap:3vw;
 }
 
 .time{
     font-family:"Compacta", sans-serif;
-    font-size:15vw;
+    font-size:11.25vw;
     line-height:0.82;
-    letter-spacing:-0.04em;
+    letter-spacing:0.01em;
     color:#F2F2F2;
+
+    width:15vw;            /* increased from 13.5vw — safely fits any digit pair */
+    text-align:center;
+    display:block;
 }
 
-.seconds-group{
-
-    display:flex;
-    align-items:flex-end;
-}
-
+/*
+    PM anchors to .top-row.
+    top:0 = top of the digit block.
+    left:100% = just past the right edge of the digits.
+    No bottom calc needed.
+*/
 .period{
-
     font-family:"Compacta", sans-serif;
-
-    font-size:3vw;
+    font-size:2.25vw;
     line-height:1;
-
     color:#242630;
 
-    margin-left:.7vw;
-    margin-bottom:.8vw;
+    align-self:flex-end;
+    margin-bottom:0.9vw;
+    margin-left:1.5vw;     /* increased from 0.525vw to prevent overlap */
 }
-
 /* ---------- BOTTOM ROW ---------- */
 
 .bottom-row{
-
-    display:grid;
-
-    grid-template-columns:
-        auto
-        auto
-        auto;
-
-    justify-content:center;
-
-    column-gap:4vw;
-
-    margin-top:.8vw;
-
-    align-items:start;
+    display:flex;
+    align-items:center;
+    gap:2vw;
+    margin-top:0.7vw;
 }
 
-.date{
-
+.date,
+.weather{
     font-family:Arial, sans-serif;
-    font-size:2.1vw;
+    font-size:1.575vw;
     color:white;
-
-    justify-self:start;
-}
-
-.empty{
-    width:100%;
 }
 
 .weather{
-
-    font-family:Arial, sans-serif;
-    font-size:2.1vw;
-    color:white;
-
     display:flex;
     align-items:center;
-    gap:10px;
-
-    justify-self:end;
+    gap:0.5vw;
 }
 
 #weatherIcon{
-    font-size:1.8vw;
+    font-size:1.35vw;
 }
 
 </style>
-
 </head>
 
 <body>
 
-<div class="wrapper">
+<div class="clock-block">
 
-```
-<!-- CLOCK -->
-
-<div class="top-row">
-
-    <div class="time" id="hours">
-        09
+    <div class="top-row">
+        <div class="time" id="hours">09</div>
+        <div class="time" id="minutes">14</div>
+        <div class="time" id="seconds">34</div>
+        <div class="period" id="period">PM</div>
     </div>
 
-    <div class="time" id="minutes">
-        14
-    </div>
-
-    <div class="seconds-group">
-
-        <div class="time" id="seconds">
-            34
+    <div class="bottom-row">
+        <div class="date" id="date">Tue, 9 Jun</div>
+        <div class="weather">
+            <span id="weatherIcon">☀</span>
+            <span id="temp">39°C</span>
         </div>
-
-        <div class="period" id="period">
-            PM
-        </div>
-
     </div>
-
-</div>
-
-<!-- DATE / WEATHER -->
-
-<div class="bottom-row">
-
-    <div class="date" id="date">
-        Tue, 9 Jun
-    </div>
-
-    <div class="empty"></div>
-
-    <div class="weather">
-
-        <span id="weatherIcon">
-            ☀
-        </span>
-
-        <span id="temp">
-            39°C
-        </span>
-
-    </div>
-
-</div>
-```
 
 </div>
 
@@ -247,44 +181,43 @@ async function updateWeather(){
         document.getElementById("temp").textContent =
             Math.round(data.current.temperature_2m) + "°C";
 
-        const code =
-            data.current.weather_code;
+        const code = data.current.weather_code;
 
         let icon = "☀";
 
-        if(code >= 1 && code <= 3)
-            icon = "⛅";
+        if(code >= 1 && code <= 3)        icon = "⛅";
+        else if(code >= 45 && code <= 48) icon = "🌫";
+        else if(code >= 51 && code <= 67) icon = "🌧";
+        else if(code >= 71 && code <= 77) icon = "❄";
+        else if(code >= 95)               icon = "⛈";
 
-        else if(code >= 45 && code <= 48)
-            icon = "🌫";
-
-        else if(code >= 51 && code <= 67)
-            icon = "🌧";
-
-        else if(code >= 71 && code <= 77)
-            icon = "❄";
-
-        else if(code >= 95)
-            icon = "⛈";
-
-        document.getElementById("weatherIcon").textContent =
-            icon;
+        document.getElementById("weatherIcon").textContent = icon;
 
     }
     catch(error){
-
         console.log(error);
-
     }
 }
 
 updateClock();
 updateWeather();
 
-setInterval(updateClock,1000);
-setInterval(updateWeather,600000);
+setInterval(updateClock, 1000);
+setInterval(updateWeather, 600000);
 
 </script>
-
+<script>
+// After fonts load, measure '00' and fix all digit widths
+document.fonts.ready.then(() => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const fs = window.innerWidth * 0.1125;
+    ctx.font = `${fs}px Compacta`;
+    const w = ctx.measureText('00').width;
+    document.querySelectorAll('.time').forEach(el => {
+        el.style.width = (w / window.innerWidth * 100) + 'vw';
+    });
+});
+</script>
 </body>
 </html>
